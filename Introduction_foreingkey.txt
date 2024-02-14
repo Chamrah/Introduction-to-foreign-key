@@ -1,0 +1,242 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| centre_formation   |
+| information_schema |
+| mobile             |
+| mysql              |
+| performance_schema |
+| sys                |
+| ziad               |
++--------------------+
+7 rows in set (1.21 sec)
+
+mysql> create database ISGI;
+Query OK, 1 row affected (0.34 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| centre_formation   |
+| information_schema |
+| isgi               |
+| mobile             |
+| mysql              |
+| performance_schema |
+| sys                |
+| ziad               |
++--------------------+
+8 rows in set (0.00 sec)
+
+mysql> create table stagiaire(
+    -> codes int primary key,
+    -> nomC varchar(40));
+ERROR 1046 (3D000): No database selected
+mysql> use ISGI;
+Database changed
+mysql> create table stagiaire(
+    -> codes int primary key,
+    -> nomC varchar(40));
+Query OK, 0 rows affected (0.93 sec)
+
+mysql> desc stagiaire;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| codes | int         | NO   | PRI | NULL    |       |
+| nomC  | varchar(40) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.06 sec)
+
+code_gr int primary key)' at line 1
+mysql> desc stagiaire;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| codes | int         | NO   | PRI | NULL    |       |
+| nomC  | varchar(40) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.02 sec)
+
+mysql> select * from stagiaire;
+Empty set (0.03 sec)
+
+mysql> insert into stagiaire
+    -> values(1,'hmouda');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> select * from stagiaire;
++-------+--------+
+| codes | nomC   |
++-------+--------+
+|     1 | hmouda |
++-------+--------+
+1 row in set (0.00 sec)
+
+mysql> insert into stagiaire
+    -> values(1,'dris');
+ERROR 1062 (23000): Duplicate entry '1' for key 'stagiaire.PRIMARY'
+mysql> insert into stagiaire
+    -> values(3,'dris');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select * from stagiaire;
++-------+--------+
+| codes | nomC   |
++-------+--------+
+|     1 | hmouda |
+|     3 | dris   |
++-------+--------+
+2 rows in set (0.00 sec)
+
+mysql> create table stg(
+    -> codegr int primary key);
+Query OK, 0 rows affected (0.38 sec)
+
+mysql> drop table stg;
+Query OK, 0 rows affected (0.46 sec)
+
+mysql> create table grp(
+    -> codegr int primary key,
+    -> filliere varchar(10) not null);
+Query OK, 0 rows affected (0.32 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_isgi |
++----------------+
+| grp            |
+| stagiaire      |
++----------------+
+2 rows in set (0.09 sec)
+
+mysql> create table stg_copy like stagiaire;
+Query OK, 0 rows affected (0.65 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_isgi |
++----------------+
+| grp            |
+| stagiaire      |
+| stg_copy       |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> desc stg_copy;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| codes | int         | NO   | PRI | NULL    |       |
+| nomC  | varchar(40) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.02 sec)
+
+mysql> desc grp;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| codegr   | int         | NO   | PRI | NULL    |       |
+| filliere | varchar(10) | NO   |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> delete from stagiaire where codes=3;
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select * from stagiaire;
++-------+--------+
+| codes | nomC   |
++-------+--------+
+|     1 | hmouda |
++-------+--------+
+1 row in set (0.00 sec)
+
+mysql> insert into grp
+    -> values(1,'dev104');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into grp
+    -> values(2,'dev102');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> select * from grp;
++--------+----------+
+| codegr | filliere |
++--------+----------+
+|      1 | dev104   |
+|      2 | dev102   |
++--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> desc grp;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| codegr   | int         | NO   | PRI | NULL    |       |
+| filliere | varchar(10) | NO   |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select*from grp;
++--------+----------+
+| codegr | filliere |
++--------+----------+
+|      1 | dev104   |
+|      2 | dev102   |
++--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> alter table stagiaire
+    -> add codegr int;
+Query OK, 0 rows affected (0.36 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table stagiaire
+    -> add foreign key(codegr) references grp(codegr);
+Query OK, 1 row affected (1.66 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> desc stagiaire;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| codes  | int         | NO   | PRI | NULL    |       |
+| nomC   | varchar(40) | YES  |     | NULL    |       |
+| codegr | int         | YES  | MUL | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into stagiaire
+    -> values(2,'ali',2);
+Query OK, 1 row affected (0.14 sec)
+
+mysql> select * from stagiaire;
++-------+--------+--------+
+| codes | nomC   | codegr |
++-------+--------+--------+
+|     1 | hmouda |   NULL |
+|     2 | ali    |      2 |
++-------+--------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from grp;
++--------+----------+
+| codegr | filliere |
++--------+----------+
+|      1 | dev104   |
+|      2 | dev102   |
++--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select * from stagiaire join grp where stagiaire.codegr=grp.codegr;
++-------+------+--------+--------+----------+
+| codes | nomC | codegr | codegr | filliere |
++-------+------+--------+--------+----------+
+|     2 | ali  |      2 |      2 | dev102   |
++-------+------+--------+--------+----------+
+1 row in set (0.00 sec)
+
+mysql>
